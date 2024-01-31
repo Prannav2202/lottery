@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .parent {
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+        }
+
+        .division {
+            border: 1px solid black;
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            cursor: pointer;
+            pointer-events: auto; /* Ensure the division can receive pointer events */
+        }
+
+        .video-background {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .text-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .lottery-ticket {
+            background-color: #ffbdbd;
+        }
+
+        .roulette-table {
+            background-color: #c9daf8;
+        }
+
+        .jackpot {
+            background-color: #ffe699;
+        }
+    </style>
+    <title>lottery games</title>
+</head>
+<body>
+    <div class="parent">
+        <div class="division lottery-ticket" onclick="redirectToPage('tickettest.html')">
+            <div class="text-overlay">Lottery Tickets</div>
+            <video class="video-background" autoplay muted loop>
+                <source src="lll.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="division roulette-table" onclick="redirectToPage('r/index.html')">
+            <div class="text-overlay">Roulette</div>
+            <video class="video-background" autoplay muted loop>
+                <source src="roulettee.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="division jackpot" onclick="redirectToPage('slots.html')">
+            <div class="text-overlay">Slots</div>
+            <video class="video-background" autoplay muted loop>
+                <source src="slots.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <script>
+        function redirectToPage(url) {
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>

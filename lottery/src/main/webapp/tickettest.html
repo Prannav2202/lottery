@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lottery Game</title>
+  <style>
+    /* ... Your existing styles ... */
+    body {
+      background: linear-gradient(to right, #0f4c75, #1b262c);
+      color: #bbe1fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 1.2em;
+    }
+
+    select {
+      padding: 10px;
+      margin-bottom: 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      outline: none;
+    }
+
+    button {
+      padding: 12px 24px;
+      background-color: #32e0c4;
+      color: #1b262c;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.2em;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    button:disabled {
+      background-color: #b0c4d9;
+      cursor: not-allowed;
+    }
+
+    button:hover {
+      background-color: #0f4c75;
+    }
+
+    p {
+      margin: 10px 0;
+      font-size: 1.2em;
+    }
+
+    #randomNumbers {
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    #selectedNumber {
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    #result {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+
+    #resultVariable {
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
+  <script>
+    var userNumbers = [];
+    var lotteryNumber;
+
+    function generateRandomNumbers() {
+      userNumbers = Array.from({ length: 6 }, (_, i) => i); // Generate numbers from 0 to 5
+      userNumbers.sort(() => Math.random() - 0.5); // Shuffle the array
+      // Set the lottery number to any one of the generated numbers
+      var randomIndex = Math.floor(Math.random() * 6);
+      lotteryNumber = userNumbers[randomIndex];
+
+      // Populate the select dropdown with generated numbers
+      var selectDropdown = document.getElementById("userNumber");
+      selectDropdown.innerHTML = "";
+      for (var i = 0; i < userNumbers.length; i++) {
+        var option = document.createElement("option");
+        option.value = userNumbers[i];
+        option.text = userNumbers[i];
+        selectDropdown.add(option);
+      }
+
+      // Display the generated numbers
+      var randomNumbers = document.getElementById("randomNumbers");
+      randomNumbers.textContent = "Your numbers: " + userNumbers.join(", ");
+    }
+
+    function checkLottery(event) {
+      event.preventDefault(); // Prevent the default form submission behavior
+      var result = document.getElementById("result");
+      var resultVariable = document.getElementById("resultVariable");
+      
+      // Get the selected number from the dropdown
+      var selectedNumber = document.getElementById("userNumber").value;
+
+      if (selectedNumber == lotteryNumber) {
+        result.textContent = "Congratulations! You won the lottery!";
+        resultVariable.textContent = "You selected the winning number: " + selectedNumber;
+        won.value = "true";
+      } else {
+        result.textContent = "Sorry, you lost. Try again!";
+        resultVariable.textContent = "You selected: " + selectedNumber + ". The winning number was: " + lotteryNumber;
+        won.value = "false";
+      }
+
+      // Display the result for 10 seconds before calling the servlet and redirecting to the same page
+      setTimeout(function() {
+        // Call the servlet and redirect to the same page
+        document.getElementById("lotteryForm").submit();
+      }, 5000);
+    }
+  </script>
+</head>
+
+<body>
+  <h1>Lottery Game</h1>
+  <!-- Add a new input field for the user's name -->
+  
+  <button onclick="generateRandomNumbers()">Generate Random Numbers</button>
+  <form id="lotteryForm" action="ticketServlet" method="post" onsubmit="return checkLottery(event)">
+    <label for="userName">Enter your name:</label>
+  <input type="text" id="userName" name="name" required>
+  <br>
+  <br>
+    <label for="userNumber">Choose a number from your set: </label>
+    <select id="userNumber"></select>
+    <button id="checkButton" type="submit">Check Lottery</button>
+    <input type="hidden" id="won" name="won" value="">
+  </form>
+  <p id="randomNumbers"></p>
+  <p id="selectedNumber"></p>
+  <p id="result"></p>
+  <p id="resultVariable"></p>
+
+  <script>
+    // Generate random numbers and display them to the user
+    generateRandomNumbers();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slot Machine Game</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #0f4c75, #1b262c); /* Same background as the Lottery Game */
+        }
+
+        h1 {
+            color: rgb(255, 255, 255);
+        }
+
+        #slot-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .slot-box {
+            width: 100px;
+            height: 150px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 0 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background-color: #fff;
+            color: #333;
+            position: relative;
+        }
+
+        .slot-number {
+            position: absolute;
+            transition: top 0.5s ease-in-out;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #balance {
+            font-size: 18px;
+            margin-top: 10px;
+            color: rgb(255, 255, 255);
+        }
+
+        #chances {
+            font-size: 18px;
+            margin-top: 10px;
+            color: rgb(255, 255, 255);
+        }
+
+        #message {
+            font-size: 18px;
+            margin-top: 20px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <!-- Rest of your code remains unchanged -->
+        <h1>Slot Machine Game</h1>
+
+    <div id="slot-container">
+        <div class="slot-box" id="slot1">
+            <div class="slot-number" id="number1">1</div>
+        </div>
+        <div class="slot-box" id="slot2">
+            <div class="slot-number" id="number2">2</div>
+        </div>
+        <div class="slot-box" id="slot3">
+            <div class="slot-number" id="number3">3</div>
+        </div>
+    </div>
+
+    <button onclick="spin()">Spin</button>
+    <div id="balance">Balance: <span id="balanceAmount">500</span></div>
+    <div id="chances">Chances left: <span id="chancesCount">3</span></div>
+    <div id="message"></div>
+
+    <script>
+        let balance = 500;
+        let chances = 3;
+
+        function spin() {
+            if ((balance > 0 || chances > 0) && chances > 0) {
+                chances--;
+
+                const result = [];
+                for (let i = 0; i < 3; i++) {
+                    const randomNumber = Math.floor(Math.random() * 3) + 1; // Numbers 1 to 10
+                    result.push(randomNumber);
+                }
+
+                updateSlots(result);
+
+                setTimeout(() => { // Delay the message to give time for the slots to update
+                    const isWin = checkWin(result);
+                    displayResult(isWin);
+                }, 3000); // Adjust the delay as needed
+
+            } else if (balance > 0) {
+                // Ask for confirmation before deducting 50 from balance
+                const confirmMessage = "Do you want to spend 50 units from your balance for 3 chances?";
+                if (confirm(confirmMessage)) {
+                    balance -= 50;
+                    chances = 3;
+                    updateBalance();
+                    updateChances();
+                }
+            }
+        }
+
+        function updateSlots(result) {
+            const slotBoxes = document.querySelectorAll('.slot-box');
+            for (let i = 0; i < slotBoxes.length; i++) {
+                const slotNumber = document.getElementById(`number${i + 1}`);
+                // Apply spinning animation by changing the top property
+                slotNumber.style.top = "-150px";
+                setTimeout(() => {
+                    // Set the result in the slot box after the spinning animation
+                    slotNumber.textContent = result[i];
+                    slotNumber.style.top = "0";
+                }, 500);
+            }
+        }
+
+        function checkWin(result) {
+            // Customize this function to define your winning conditions
+            // For example, if all three numbers are the same, it's a win.
+            return result[0] === result[1] && result[1] === result[2];
+        }
+
+        function displayResult(isWin) {
+            if (isWin) {
+                alert("Congratulations! You won!");
+                balance += 100; // You can adjust the winning amount
+            } else {
+                displayLossMessage();
+            }
+
+            updateBalance();
+            updateChances();
+
+            if (balance <= 0 && chances <= 0) {
+                // You can add additional logic here if needed
+            }
+        }
+
+        function updateBalance() {
+            document.getElementById('balanceAmount').textContent = balance;
+        }
+
+        function updateChances() {
+            document.getElementById('chancesCount').textContent = chances;
+        }
+
+        function displayLossMessage() {
+            document.getElementById('message').textContent = "Sorry, you lost. Click 'Spin' to try again!";
+            setTimeout(() => {
+                document.getElementById('message').textContent = "";
+            }, 3000); // Clear the message after 3 seconds, adjust as needed
+        }
+    </script>
+</body>
+</html>

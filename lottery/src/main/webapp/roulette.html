@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roulette Game</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #roulette {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            border: 2px solid black;
+            border-radius: 50%;
+            animation: rotate 5s linear;
+        }
+        .number {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background-color: red;
+            border-radius: 50%;
+            transform-origin: center bottom;
+        }
+        .outcome {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="roulette">
+        <!-- Create roulette numbers dynamically using JavaScript -->
+    </div>
+    <div class="outcome" id="outcome"></div>
+    <button onclick="spinRoulette()">Spin</button>
+
+    <script>
+        // Number of roulette sections
+        const numSections = 18;
+
+        // Current selected number
+        let selectedNumber;
+
+        // Create roulette numbers dynamically
+        const roulette = document.getElementById('roulette');
+        for (let i = 0; i < numSections; i++) {
+            const number = document.createElement('div');
+            number.className = 'number';
+            number.textContent = i + 1;
+            number.style.transform = `rotate(${(360 / numSections) * i}deg) translate(180px) rotate(-${(360 / numSections) * i}deg)`;
+            number.addEventListener('click', () => {
+                selectedNumber = i + 1;
+                document.getElementById('outcome').textContent = '';
+            });
+            roulette.appendChild(number);
+        }
+
+        function spinRoulette() {
+            if (selectedNumber === undefined) {
+                alert('Please choose a number before spinning.');
+                return;
+            }
+
+            const resultNumber = Math.floor(Math.random() * numSections) + 1;
+            const resultText = `Result: ${resultNumber}`;
+
+            document.getElementById('outcome').textContent = resultText;
+
+            // Calculate the rotation angle for the result number
+            const rotationAngle = (360 / numSections) * (resultNumber - 1) + 360 * 10;
+
+            // Apply animation to rotate the wheel to the result
+            roulette.style.animation = '';
+            roulette.style.transform = `rotate(${rotationAngle}deg)`;
+            setTimeout(() => {
+                roulette.style.animation = 'rotate 5s linear infinite';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
